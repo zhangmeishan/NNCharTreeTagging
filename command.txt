@@ -1,0 +1,4 @@
+cmake .. -DEIGEN3_INCLUDE_DIR=/c/eigen/ -DN3L_INCLUDE_DIR=/d/github/LibN3L-2.0/
+
+-l -train D:\CL2017\data\train.ctb50.chardep.g -dev D:\CL2017\data\dev.ctb50.chardep.g -test D:\CL2017\data\test.ctb50.chardep.g -option D:\CL2017\option.debug
+-l -train D:\ACL2016\ACL2016-Segmentation\experiment-v1\ctb60\train.ctb60.seg -dev D:\ACL2016\ACL2016-Segmentation\experiment-v1\ctb60\dev.ctb60.seg -test D:\ACL2016\ACL2016-Segmentation\experiment-v1\ctb60\test.ctb60.seg -option D:\ACL2016\ACL2016-Segmentation\experiment-v1\option.debug
