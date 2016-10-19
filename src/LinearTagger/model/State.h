@@ -577,6 +577,7 @@ public:
 	inline void prepare(HyperParams* hyper_params, ModelParams* model_params){
 		//basic features
 		static int idx, length, p1wstart, p1wend;
+		static string lastTag;
 		_atomFeat.str_C0 = _next_index < _char_size ? _chars->at(_next_index) : nullkey;
 		_atomFeat.str_1C = _next_index > 0 && _next_index - 1 < _char_size ? _chars->at(_next_index - 1) : nullkey;
 		_atomFeat.str_2C = _next_index > 1 && _next_index - 2 < _char_size ? _chars->at(_next_index - 2) : nullkey;
@@ -719,6 +720,22 @@ public:
 		}
 
 		_atomFeat.stacksize = _stacksize;
+
+		lastTag = _wend == -1 ? nullkey : CTag::TAG_STRING[_tag];
+		_atomFeat.sid_1WTagD = 0;
+		if (hyper_params->word_tags.find(_atomFeat.str_1W) != hyper_params->word_tags.end()){
+			if (hyper_params->word_tags[_atomFeat.str_1W].find(lastTag) != hyper_params->word_tags[_atomFeat.str_1W].end()){
+				if (hyper_params->word_tags[_atomFeat.str_1W][lastTag] > hyper_params->maxfreq / 5000 + hyper_params->threshold){
+					_atomFeat.sid_1WTagD = 1;
+				}
+				else{
+					_atomFeat.sid_1WTagD = 2;
+				}
+			}
+			else{
+				_atomFeat.sid_1WTagD = 3;
+			}	
+		}
 
 		//
 		if (model_params != NULL){

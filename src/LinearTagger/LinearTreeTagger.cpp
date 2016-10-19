@@ -24,18 +24,19 @@ TreeTagger::~TreeTagger() {
 int TreeTagger::createAlphabet(const vector<Instance>& vecInsts) {
 	cout << "Creating Alphabet..." << endl;
 
-	int numInstance = vecInsts.size();
+	int totalInstance = vecInsts.size();
 
 	unordered_map<string, int> word_stat;
 	unordered_map<string, int> char_stat;
 	unordered_map<string, set<string> > char_cat;
+	unordered_map<string, unordered_map<string, int> > word_tag_stat;
 
-	assert(numInstance > 0);
-	int count = 0;
-	for (numInstance = 0; numInstance < vecInsts.size(); numInstance++) {
+	assert(totalInstance > 0);
+	for (int numInstance = 0; numInstance < vecInsts.size(); numInstance++) {
 		const Instance &instance = vecInsts[numInstance];
 		for (int idx = 0; idx < instance.wordsize(); idx++) {
-			word_stat[normalize_to_lowerwithdigit(instance.result.words[idx])]++;
+			word_stat[instance.result.words[idx]]++;
+			word_tag_stat[instance.result.words[idx]][instance.result.postags[idx]]++;
 		}
 		int word_index = -1;
 		for (int idx = 0; idx < instance.charsize(); idx++) {
@@ -43,26 +44,38 @@ int TreeTagger::createAlphabet(const vector<Instance>& vecInsts) {
 			if (idx == 0 || instance.result.charlabels[idx] == "b")word_index++;
 			char_cat[instance.chars[idx]].insert(instance.result.postags[word_index]);
 		}
-		count += instance.wordsize();
 	}
 	word_stat[nullkey] = m_options.wordCutOff + 1;
 	char_stat[nullkey] = m_options.charCutOff + 1;
 	m_driver._modelparams.words.initial(word_stat, m_options.wordCutOff);
 	m_driver._modelparams.chars.initial(char_stat, m_options.charCutOff);
 
-	static unordered_map<string, int>::const_iterator elem_iter;
+	static unordered_map<string, int>::const_iterator elem_iter, pos_iter;
+	int maxfreq = 0;
 	for (elem_iter = word_stat.begin(); elem_iter != word_stat.end(); elem_iter++){
-		if (elem_iter->second > count / 50000 + 3){
-			m_driver._hyperparams.dicts.insert(elem_iter->first);
+		if (elem_iter->second > maxfreq){
+			maxfreq = elem_iter->second;
 		}
 	}
+	m_driver._hyperparams.maxfreq = maxfreq;
+
+
+	for (elem_iter = word_stat.begin(); elem_iter != word_stat.end(); elem_iter++){
+		if (elem_iter->second > maxfreq / 5000 + m_options.threshold){
+			m_driver._hyperparams.dicts.insert(elem_iter->first);
+			for (pos_iter = word_tag_stat[elem_iter->first].begin(); pos_iter != word_tag_stat[elem_iter->first].end(); pos_iter++){
+				m_driver._hyperparams.word_tags[elem_iter->first][pos_iter->first] = pos_iter->second;
+			}
+		}
+	}
+
 	static set<string>::iterator set_it;
 	static string charcat;
 	m_driver._modelparams.charCats.clear();
 	m_driver._modelparams.charCats.from_string(nullkey);
 	m_driver._modelparams.charCats.from_string(unknownkey);
 	for (elem_iter = char_stat.begin(); elem_iter != char_stat.end(); elem_iter++){
-		if (elem_iter->second > count / 50000 + 3){
+		if (elem_iter->second > maxfreq / 5000 + m_options.threshold){
 			charcat = "";
 			for (set_it = char_cat[elem_iter->first].begin(); set_it != char_cat[elem_iter->first].end(); set_it++){
 				charcat = charcat + "_" + *set_it;
@@ -80,6 +93,7 @@ int TreeTagger::createAlphabet(const vector<Instance>& vecInsts) {
 	unordered_map<string, int> subword_stat;
 	unordered_map<string, int> s0s1word_head_left;
 	unordered_map<string, int> s0s1word_head_right;
+	unordered_map<string, unordered_map<string, int> > s0s1word_tag_stat;
 
 	vector<CStateItem> state(m_driver._hyperparams.maxlength + 1);
 	CResult output;
@@ -87,7 +101,7 @@ int TreeTagger::createAlphabet(const vector<Instance>& vecInsts) {
 	Metric evalarc, evalseg, evalpos;
 	int actionNum;
 	evalarc.reset(); evalseg.reset(); evalpos.reset();
-	for (numInstance = 0; numInstance < vecInsts.size(); numInstance++) {
+	for (int numInstance = 0; numInstance < totalInstance; numInstance++) {
 		const Instance &instance = vecInsts[numInstance];
 		actionNum = 0;
 		state[actionNum].clear();
@@ -101,9 +115,11 @@ int TreeTagger::createAlphabet(const vector<Instance>& vecInsts) {
 			subword_stat[state[actionNum]._atomFeat.str_s2SW]++;
 			if (answer.isArcLeft()){
 				s0s1word_head_left[state[actionNum]._atomFeat.str_s0s1SW]++;
+				s0s1word_tag_stat[state[actionNum]._atomFeat.str_s0s1SW][CTag::TAG_STRING[state[actionNum]._atomFeat.sid_1WP]]++;
 			}
 			if (answer.isArcRight()){
 				s0s1word_head_right[state[actionNum]._atomFeat.str_s0s1SW]++;
+				s0s1word_tag_stat[state[actionNum]._atomFeat.str_s0s1SW][CTag::TAG_STRING[state[actionNum]._atomFeat.sid_1WP]]++;
 			}
 			state[actionNum].move(&(state[actionNum + 1]), answer);
 			actionNum++;
@@ -134,19 +150,19 @@ int TreeTagger::createAlphabet(const vector<Instance>& vecInsts) {
 	m_driver._modelparams.subwords.initial(subword_stat);
 
 	for (elem_iter = s0s1word_head_left.begin(); elem_iter != s0s1word_head_left.end(); elem_iter++){
-		if (elem_iter->second > count / 50000 + 3){
+		if (elem_iter->second > maxfreq / 5000 + m_options.threshold){
 			m_driver._hyperparams.s0s1_dicts_left.insert(elem_iter->first);
 		}
 	}
 
 	for (elem_iter = s0s1word_head_right.begin(); elem_iter != s0s1word_head_right.end(); elem_iter++){
-		if (elem_iter->second > count / 50000 + 3){
+		if (elem_iter->second > maxfreq / 5000 + m_options.threshold){
 			m_driver._hyperparams.s0s1_dicts_right.insert(elem_iter->first);
 		}
 	}
 
 
-	cout << numInstance << " " << endl;
+	cout << totalInstance << " " << endl;
 	cout << "Total word num: " << word_stat.size() << endl;
 	cout << "Total char num: " << char_stat.size() << endl;
 

@@ -44,6 +44,7 @@ public:
 public:
 	int sid_1WD;
 	int sid_1WL;
+	int sid_1WTagD;
 	int sid_2WL;
 
 	//additional for pos tagging
@@ -135,6 +136,7 @@ public:
 
 		sid_1W = -1;
 		sid_1WD = -1;
+		sid_1WTagD = -1;
 		sid_1WL = -1;
 		sid_1Wc0 = -1;
 		sid_1Wci.clear();
@@ -215,10 +217,8 @@ public:
 			model->sep_1Wc0_C0.collectFeature(sid_1Wc0, sid_C0);
 			model->sep_2CT_1CT_CT0.collectFeature(sid_2CT, sid_1CT, sid_CT0);
 			model->sep_1W.collectFeature(sid_1W);
-			model->sep_1WD_1WL.collectFeature(sid_1WD, sid_1WL);
-			if (sid_1WL == 1){
-				model->sep_1WSingle.collectFeature(sid_1W);
-			}
+			if (sid_1WD == 1)model->sep_1WD_1WL.collectFeature(sid_1WD, sid_1WL);	
+			if (sid_1WL == 1)model->sep_1WSingle.collectFeature(sid_1W);
 			model->sep_1W_C0.collectFeature(sid_1W, sid_C0);
 			model->sep_2W_1W.collectFeature(sid_2W, sid_1W);
 			model->sep_2Wc0_1W.collectFeature(sid_2Wc0, sid_1W);
@@ -264,9 +264,9 @@ public:
 			model->arc_n0c_s0c_s1c_ac.collectFeature(sid_C0, sid_s0SWhc, sid_s1SWhc);
 			model->arc_s0c_s1c_s2c_ac.collectFeature(sid_s0SWhc, sid_s1SWhc, sid_s2SWhc);
 
-			model->arc_s0s1left_s0s1SWL_ac.collectFeature(sid_s0s1arcl, sid_s0s1SWL);
-			model->arc_s0s1right_s0s1SWL_ac.collectFeature(sid_s0s1arcr, sid_s0s1SWL);
-			model->arc_s0s1SWD_s0s1SWL_ac.collectFeature(sid_s0s1SWD, sid_s0s1SWL);
+			if (sid_s0s1arcl == 1)model->arc_s0s1left_s0s1SWL_ac.collectFeature(sid_s0s1arcl, sid_s0s1SWL);
+			if (sid_s0s1arcr == 1)model->arc_s0s1right_s0s1SWL_ac.collectFeature(sid_s0s1arcr, sid_s0s1SWL);
+			if (sid_s0s1SWD == 1)model->arc_s0s1SWD_s0s1SWL_ac.collectFeature(sid_s0s1SWD, sid_s0s1SWL);
 		}
 
 		if (ac.isSeparate() || ac.isFinish() || ac.isIdle()){
@@ -315,6 +315,11 @@ public:
 			model->app_1C_C0_1WP.collectFeature(sid_1C, sid_C0, sid_1WP);
 			model->app_1Wc0_C0_1WP.collectFeature(sid_1Wc0, sid_C0, sid_1WP);
 			model->app_2CT_1CT_CT0_1WP.collectFeature(sid_2CT, sid_1CT, sid_CT0, sid_1WP);
+		}
+
+
+		if (ac.isSeparate() || ac.isFinish() || ac.isIdle()){
+			if (sid_1WTagD == 1)model->sep_1WTagD_1WP_1WL.collectFeature(sid_1WTagD, sid_1WP, sid_1WL);
 		}
 
 	}

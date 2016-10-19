@@ -1,5 +1,5 @@
 /*
- * TreeTagger.h
+ * APTreeTagger.h
  *
  *  Created on: Jan 25, 2016
  *      Author: mszhang

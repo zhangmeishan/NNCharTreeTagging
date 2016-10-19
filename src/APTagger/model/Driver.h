@@ -107,9 +107,9 @@ private:
 	dtype loss(int num){
 		int step = _pcg->outputs.size();
 		_eval.correct_label_count += step;
-		PNode pBestNode = NULL;
-		PNode pGoldNode = NULL;
-		PNode pCurNode;
+		static PNode pBestNode = NULL;
+		static PNode pGoldNode = NULL;
+		static PNode pCurNode;
 		
 		int offset = _pcg->outputs[step - 1].size();
 		for (int idx = 0; idx < offset; idx++){
@@ -138,7 +138,7 @@ private:
 
 		return 0.0;
 	}
-
+	
 
 	void predict(CResult& result){
 		int step = _pcg->outputs.size();

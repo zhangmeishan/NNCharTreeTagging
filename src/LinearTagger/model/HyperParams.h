@@ -16,6 +16,9 @@ struct HyperParams{
 	unordered_set<string> s0s1_dicts_left;
 	unordered_set<string> s0s1_dicts_right;
 	unordered_map<string, string> char_cat;
+	unordered_map<string, unordered_map<string, int> > word_tags;
+	int maxfreq;
+	int threshold;
 
 
 	dtype nnRegular; // for optimization
@@ -32,7 +35,9 @@ public:
 	void setRequared(Options& opt){
 		//please specify diction outside
 		beam = opt.beam;
+		threshold = opt.threshold;
 		bAssigned = true;
+
 
 		nnRegular = opt.regParameter;
 		adaAlpha = opt.adaAlpha;

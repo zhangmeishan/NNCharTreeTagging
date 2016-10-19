@@ -150,6 +150,8 @@ public:
 	SparseC2Params arc_s0s1right_s0s1SWL_ac;
 	SparseC2Params arc_s0s1SWD_s0s1SWL_ac;
 
+	SparseC3Params sep_1WTagD_1WP_1WL;
+
 
 public:
 	bool initial(HyperParams& opts){
@@ -250,10 +252,11 @@ public:
 		pos_1Whc_2WP_ac.initial(opts.action_num);
 		pos_2Whc_1WP_ac.initial(opts.action_num);
 
-
 		arc_s0s1left_s0s1SWL_ac.initial(opts.action_num);
 		arc_s0s1right_s0s1SWL_ac.initial(opts.action_num);
 		arc_s0s1SWD_s0s1SWL_ac.initial(opts.action_num);
+
+		sep_1WTagD_1WP_1WL.initial();
 
 		return true;
 	}
@@ -353,10 +356,11 @@ public:
 		pos_1Whc_2WP_ac.exportAdaParams(ada);
 		pos_2Whc_1WP_ac.exportAdaParams(ada);
 
-
 		arc_s0s1left_s0s1SWL_ac.exportAdaParams(ada);
 		arc_s0s1right_s0s1SWL_ac.exportAdaParams(ada);
 		arc_s0s1SWD_s0s1SWL_ac.exportAdaParams(ada);
+
+		sep_1WTagD_1WP_1WL.exportAdaParams(ada);
 	}
 
 
@@ -457,6 +461,8 @@ public:
 		arc_s0s1left_s0s1SWL_ac.setFixed(base);
 		arc_s0s1right_s0s1SWL_ac.setFixed(base);
 		arc_s0s1SWD_s0s1SWL_ac.setFixed(base);
+
+		sep_1WTagD_1WP_1WL.setFixed(base);
 	}
 
 	// will add it later

@@ -144,6 +144,8 @@ struct ActionedNodes {
 	SparseC2Node arc_s0s1right_s0s1SWL_ac;
 	SparseC2Node arc_s0s1SWD_s0s1SWL_ac;
 
+	SparseC3Node sep_1WTagD_1WP_1WL;
+
 	vector<SPAddNode> outputs;
 
 public:
@@ -249,6 +251,8 @@ public:
 		arc_s0s1right_s0s1SWL_ac.setParam(&params.arc_s0s1right_s0s1SWL_ac);
 		arc_s0s1SWD_s0s1SWL_ac.setParam(&params.arc_s0s1SWD_s0s1SWL_ac);
 
+		sep_1WTagD_1WP_1WL.setParam(&params.sep_1WTagD_1WP_1WL);
+
 		outputs.resize(hyparams.action_num);
 	}
 
@@ -263,17 +267,15 @@ public:
 		sep_1Wc0_C0.forward(cg, atomFeat.sid_1Wc0, atomFeat.sid_C0);
 		sep_2CT_1CT_CT0.forward(cg, atomFeat.sid_2CT, atomFeat.sid_1CT, atomFeat.sid_CT0);
 		sep_1W.forward(cg, atomFeat.sid_1W);
-		sep_1WD_1WL.forward(cg, atomFeat.sid_1WD, atomFeat.sid_1WL);
+		if (atomFeat.sid_1WD == 1)sep_1WD_1WL.forward(cg, atomFeat.sid_1WD, atomFeat.sid_1WL);
+		if (atomFeat.sid_1WL == 1)sep_1WSingle.forward(cg, atomFeat.sid_1W);
+		sep_1W_C0.forward(cg, atomFeat.sid_1W, atomFeat.sid_C0);
 		sep_2W_1W.forward(cg, atomFeat.sid_2W, atomFeat.sid_1W);
 		sep_2Wc0_1W.forward(cg, atomFeat.sid_2Wc0, atomFeat.sid_1W);
 		sep_2Wcn_1W.forward(cg, atomFeat.sid_2Wcn, atomFeat.sid_1W);
 		sep_2Wc0_1Wc0.forward(cg, atomFeat.sid_2Wc0, atomFeat.sid_1Wc0);
 		sep_2Wcn_1Wcn.forward(cg, atomFeat.sid_2Wcn, atomFeat.sid_1C);
-		sep_2W_1WL.forward(cg, atomFeat.sid_2W, atomFeat.sid_1WL);
-		if (atomFeat.sid_1WL == 1){
-			sep_1WSingle.forward(cg, atomFeat.sid_1W);
-		}
-		sep_1W_C0.forward(cg, atomFeat.sid_1W, atomFeat.sid_C0);
+		sep_2W_1WL.forward(cg, atomFeat.sid_2W, atomFeat.sid_1WL);				
 		sep_2WL_1W.forward(cg, atomFeat.sid_2WL, atomFeat.sid_1W);
 		sep_2W_1Wcn.forward(cg, atomFeat.sid_2W, atomFeat.sid_1C);
 		sep_1Wc0_1WL.forward(cg, atomFeat.sid_1Wc0, atomFeat.sid_1WL);
@@ -312,9 +314,9 @@ public:
 			arc_n0c_s0c_s1c_ac.forward(cg, atomFeat.sid_C0, atomFeat.sid_s0SWhc, atomFeat.sid_s1SWhc);
 			arc_s0c_s1c_s2c_ac.forward(cg, atomFeat.sid_s0SWhc, atomFeat.sid_s1SWhc, atomFeat.sid_s2SWhc);
 
-			arc_s0s1left_s0s1SWL_ac.forward(cg, atomFeat.sid_s0s1arcl, atomFeat.sid_s0s1SWL);
-			arc_s0s1right_s0s1SWL_ac.forward(cg, atomFeat.sid_s0s1arcr, atomFeat.sid_s0s1SWL);
-			arc_s0s1SWD_s0s1SWL_ac.forward(cg, atomFeat.sid_s0s1SWD, atomFeat.sid_s0s1SWL);
+			if (atomFeat.sid_s0s1arcl == 1)arc_s0s1left_s0s1SWL_ac.forward(cg, atomFeat.sid_s0s1arcl, atomFeat.sid_s0s1SWL);
+			if (atomFeat.sid_s0s1arcr == 1)arc_s0s1right_s0s1SWL_ac.forward(cg, atomFeat.sid_s0s1arcr, atomFeat.sid_s0s1SWL);
+			if (atomFeat.sid_s0s1SWD == 1)arc_s0s1SWD_s0s1SWL_ac.forward(cg, atomFeat.sid_s0s1SWD, atomFeat.sid_s0s1SWL);
 		}
 
 		pos_1W_1WP.forward(cg, atomFeat.sid_1W, atomFeat.sid_1WP);
@@ -361,6 +363,8 @@ public:
 		app_1Wc0_C0_1WP.forward(cg, atomFeat.sid_1Wc0, atomFeat.sid_C0, atomFeat.sid_1WP);
 		app_2CT_1CT_CT0_1WP.forward(cg, atomFeat.sid_2CT, atomFeat.sid_1CT, atomFeat.sid_CT0, atomFeat.sid_1WP);
 
+		if (atomFeat.sid_1WTagD == 1)sep_1WTagD_1WP_1WL.forward(cg, atomFeat.sid_1WTagD, atomFeat.sid_1WP, atomFeat.sid_1WL);
+
 		static vector<PNode> sumNodes;
 		static CAction ac;
 		static int ac_num;
@@ -380,17 +384,15 @@ public:
 				sumNodes.push_back(&sep_1Wc0_C0);
 				sumNodes.push_back(&sep_2CT_1CT_CT0);
 				sumNodes.push_back(&sep_1W);
-				sumNodes.push_back(&sep_1WD_1WL);
-				if (atomFeat.sid_1WL == 1){
-					sumNodes.push_back(&sep_1WSingle);
-				}
+				if (atomFeat.sid_1WD == 1)sumNodes.push_back(&sep_1WD_1WL);
+				if (atomFeat.sid_1WL == 1)sumNodes.push_back(&sep_1WSingle);
 				sumNodes.push_back(&sep_1W_C0);
 				sumNodes.push_back(&sep_2W_1W);
 				sumNodes.push_back(&sep_2Wc0_1W);
 				sumNodes.push_back(&sep_2Wcn_1W);
 				sumNodes.push_back(&sep_2Wc0_1Wc0);
 				sumNodes.push_back(&sep_2Wcn_1Wcn);
-				sumNodes.push_back(&sep_2W_1WL);
+				sumNodes.push_back(&sep_2W_1WL);											
 				sumNodes.push_back(&sep_2WL_1W);
 				sumNodes.push_back(&sep_2W_1Wcn);
 				sumNodes.push_back(&sep_1Wc0_1WL);
@@ -429,9 +431,9 @@ public:
 				sumNodes.push_back(&arc_n0c_s0c_s1c_ac);
 				sumNodes.push_back(&arc_s0c_s1c_s2c_ac);
 
-				sumNodes.push_back(&arc_s0s1left_s0s1SWL_ac);
-				sumNodes.push_back(&arc_s0s1right_s0s1SWL_ac);
-				sumNodes.push_back(&arc_s0s1SWD_s0s1SWL_ac);
+				if (atomFeat.sid_s0s1arcl == 1)sumNodes.push_back(&arc_s0s1left_s0s1SWL_ac);
+				if (atomFeat.sid_s0s1arcr == 1)sumNodes.push_back(&arc_s0s1right_s0s1SWL_ac);
+				if (atomFeat.sid_s0s1SWD == 1)sumNodes.push_back(&arc_s0s1SWD_s0s1SWL_ac);
 			}
 
 			if (ac.isSeparate() || ac.isFinish() || ac.isIdle()){
@@ -482,7 +484,10 @@ public:
 				sumNodes.push_back(&app_2CT_1CT_CT0_1WP);
 			}
 
-
+			if (ac.isSeparate() || ac.isFinish() || ac.isIdle()){
+				if (atomFeat.sid_1WTagD == 1)sumNodes.push_back(&sep_1WTagD_1WP_1WL);
+			}
+			
 			if (prevStateNode != NULL){
 				sumNodes.push_back(prevStateNode);
 			}

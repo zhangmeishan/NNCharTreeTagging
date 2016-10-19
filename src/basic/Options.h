@@ -28,6 +28,7 @@ public:
 	dtype clip;
 	dtype oovRatio;
 	int beam;
+	int threshold;
 
 	int sepHiddenSize;
 	int appHiddenSize;
@@ -107,6 +108,7 @@ public:
 		testFiles.clear();
 		outBest = "";
 		base = 1;
+		threshold = 5;
 	}
 
 	virtual ~Options() {
@@ -148,6 +150,8 @@ public:
 				oovRatio = atof(pr.second.c_str());
 			if (pr.first == "beam")
 				beam = atoi(pr.second.c_str());
+			if (pr.first == "threshold")
+				threshold = atoi(pr.second.c_str());
 
 			if (pr.first == "sepHiddenSize")
 				sepHiddenSize = atoi(pr.second.c_str());
@@ -225,6 +229,7 @@ public:
 		std::cout << "clip = " << clip << std::endl;
 		std::cout << "oovRatio = " << oovRatio << std::endl;
 		std::cout << "beam = " << beam << std::endl;
+		std::cout << "threshold = " << threshold << std::endl;
 
 		std::cout << "sepHiddenSize = " << sepHiddenSize << std::endl;
 		std::cout << "appHiddenSize = " << appHiddenSize << std::endl;
