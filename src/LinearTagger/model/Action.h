@@ -19,11 +19,11 @@
 // for segmentation, there are only threee valid operations
 class CAction {
 public:
-  enum CODE {NO_ACTION=0, APP=1, FIN=2, IDLE=3, ARCRIGHT=4, ARCLEFT=5, SEP=6, SEP_END=SEP+CTag::TAG_SIZE};
+  enum CODE {APP=0, FIN=1, IDLE=2, ARCRIGHT=3, ARCLEFT=4, SEP=5, SEP_END=SEP+CTag::TAG_SIZE, NO_ACTION=1000};
   unsigned long _code;
 
 public:
-   CAction() : _code(0){
+   CAction() : _code(NO_ACTION){
    }
 
    CAction(int code) : _code(code){
@@ -33,7 +33,7 @@ public:
    }
 
 public:
-   inline void clear() { _code=0; }
+   inline void clear() { _code=NO_ACTION; }
 
    inline void set(int code){
      _code = code;
