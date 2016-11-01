@@ -334,6 +334,8 @@ void TreeTagger::train(const string& trainFile, const string& devFile, const str
 		}
 
 		if (bEvaluate && devNum > 0) {
+			clock_t time_start = clock();
+			std::cout << "Dev start." << std::endl;
 			bCurIterBetter = false;
 			if (!m_options.outBest.empty())
 				decodeInstResults.clear();
@@ -345,6 +347,7 @@ void TreeTagger::train(const string& trainFile, const string& devFile, const str
 					decodeInstResults.push_back(curDecodeInst);
 				}
 			}
+			std::cout << "Dev finished. Total time taken is: " << double(clock() - time_start) / CLOCKS_PER_SEC << std::endl;
 			std::cout << "dev:" << std::endl;
 			metricseg_dev.print();
 			metricpos_dev.print();
@@ -357,6 +360,8 @@ void TreeTagger::train(const string& trainFile, const string& devFile, const str
 
 
 			if (testNum > 0) {
+				time_start = clock();
+				std::cout << "Test start." << std::endl;
 				if (!m_options.outBest.empty())
 					decodeInstResults.clear();
 				metricseg_test.reset(); metricpos_test.reset(); metricarc_test.reset();
@@ -367,6 +372,7 @@ void TreeTagger::train(const string& trainFile, const string& devFile, const str
 						decodeInstResults.push_back(curDecodeInst);
 					}
 				}
+				std::cout << "Test finished. Total time taken is: " << double(clock() - time_start) / CLOCKS_PER_SEC << std::endl;
 				std::cout << "test:" << std::endl;
 				metricseg_test.print();
 				metricpos_test.print();
@@ -379,6 +385,7 @@ void TreeTagger::train(const string& trainFile, const string& devFile, const str
 
 			for (int idx = 0; idx < otherInsts.size(); idx++) {
 				std::cout << "processing " << m_options.testFiles[idx] << std::endl;
+				time_start = clock();
 				if (!m_options.outBest.empty())
 					decodeInstResults.clear();
 				metricseg_test.reset(); metricpos_test.reset(); metricarc_test.reset();
@@ -389,6 +396,7 @@ void TreeTagger::train(const string& trainFile, const string& devFile, const str
 						decodeInstResults.push_back(curDecodeInst);
 					}
 				}
+				std::cout << m_options.testFiles[idx] << " finished. Total time taken is: " << double(clock() - time_start) / CLOCKS_PER_SEC << std::endl;
 				std::cout << "test:" << std::endl;
 				metricseg_test.print();
 				metricpos_test.print();

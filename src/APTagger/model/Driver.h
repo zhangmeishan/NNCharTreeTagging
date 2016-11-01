@@ -133,6 +133,9 @@ private:
 			}
 			pBestNode->loss.coeffRef(0) = 1.0 / num;
 
+			pGoldNode->lossed = true;
+			pBestNode->lossed = true;
+
 			return 1.0;
 		}
 

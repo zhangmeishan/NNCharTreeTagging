@@ -374,118 +374,118 @@ public:
 			sumNodes.clear();
 
 			if (ac.isAppend()){
-				sumNodes.push_back(&app_1C_C0);
-				sumNodes.push_back(&app_1Wc0_C0);
-				sumNodes.push_back(&app_2CT_1CT_CT0);
+				if (app_1C_C0.executed)sumNodes.push_back(&app_1C_C0);
+				if (app_1Wc0_C0.executed)sumNodes.push_back(&app_1Wc0_C0);
+				if (app_2CT_1CT_CT0.executed)sumNodes.push_back(&app_2CT_1CT_CT0);
 			}
 
 			if (ac.isSeparate() || ac.isFinish() || ac.isIdle()){
-				sumNodes.push_back(&sep_1C_C0);
-				sumNodes.push_back(&sep_1Wc0_C0);
-				sumNodes.push_back(&sep_2CT_1CT_CT0);
-				sumNodes.push_back(&sep_1W);
-				if (atomFeat.sid_1WD == 1)sumNodes.push_back(&sep_1WD_1WL);
-				if (atomFeat.sid_1WL == 1)sumNodes.push_back(&sep_1WSingle);
-				sumNodes.push_back(&sep_1W_C0);
-				sumNodes.push_back(&sep_2W_1W);
-				sumNodes.push_back(&sep_2Wc0_1W);
-				sumNodes.push_back(&sep_2Wcn_1W);
-				sumNodes.push_back(&sep_2Wc0_1Wc0);
-				sumNodes.push_back(&sep_2Wcn_1Wcn);
-				sumNodes.push_back(&sep_2W_1WL);											
-				sumNodes.push_back(&sep_2WL_1W);
-				sumNodes.push_back(&sep_2W_1Wcn);
-				sumNodes.push_back(&sep_1Wc0_1WL);
-				sumNodes.push_back(&sep_1Wcn_1WL);
+				if (sep_1C_C0.executed)sumNodes.push_back(&sep_1C_C0);
+				if (sep_1Wc0_C0.executed)sumNodes.push_back(&sep_1Wc0_C0);
+				if (sep_2CT_1CT_CT0.executed)sumNodes.push_back(&sep_2CT_1CT_CT0);
+				if (sep_1W.executed)sumNodes.push_back(&sep_1W);
+				if (sep_1WD_1WL.executed && atomFeat.sid_1WD == 1)sumNodes.push_back(&sep_1WD_1WL);
+				if (sep_1WSingle.executed && atomFeat.sid_1WL == 1)sumNodes.push_back(&sep_1WSingle);
+				if (sep_1W_C0.executed)sumNodes.push_back(&sep_1W_C0);
+				if (sep_2W_1W.executed)sumNodes.push_back(&sep_2W_1W);
+				if (sep_2Wc0_1W.executed)sumNodes.push_back(&sep_2Wc0_1W);
+				if (sep_2Wcn_1W.executed)sumNodes.push_back(&sep_2Wcn_1W);
+				if (sep_2Wc0_1Wc0.executed)sumNodes.push_back(&sep_2Wc0_1Wc0);
+				if (sep_2Wcn_1Wcn.executed)sumNodes.push_back(&sep_2Wcn_1Wcn);
+				if (sep_2W_1WL.executed)sumNodes.push_back(&sep_2W_1WL);
+				if (sep_2WL_1W.executed)sumNodes.push_back(&sep_2WL_1W);
+				if (sep_2W_1Wcn.executed)sumNodes.push_back(&sep_2W_1Wcn);
+				if (sep_1Wc0_1WL.executed)sumNodes.push_back(&sep_1Wc0_1WL);
+				if (sep_1Wcn_1WL.executed)sumNodes.push_back(&sep_1Wcn_1WL);
 				for (int idy = 0; idy < atomFeat.sid_1Wci.size() && idy < max_seg_length; idy++){
-					sumNodes.push_back(&(sep_1Wci_1Wcn_1WP[idy]));
+					if (sep_1Wci_1Wcn_1WP[idy].executed)sumNodes.push_back(&(sep_1Wci_1Wcn_1WP[idy]));
 				}
 			}
 
 			if (atomFeat.stacksize > 1){
-				sumNodes.push_back(&arc_s0w_ac);
-				sumNodes.push_back(&arc_s0t_ac);
-				sumNodes.push_back(&arc_s0w_s0t_ac);
-				sumNodes.push_back(&arc_s1w_ac);
-				sumNodes.push_back(&arc_s1w_s1t_ac);
-				sumNodes.push_back(&arc_n0c_ac);
-				sumNodes.push_back(&arc_s0w_s1w_ac);
-				sumNodes.push_back(&arc_s0w_s1w_s0t_ac);
-				sumNodes.push_back(&arc_s0w_n0c_ac);
-				sumNodes.push_back(&arc_s0w_n0c_s0t_ac);
-				sumNodes.push_back(&arc_s1w_n0c_ac);
-				sumNodes.push_back(&arc_s1w_n0c_s0t_ac);
-				sumNodes.push_back(&arc_n0c_s0t_ac);
-				sumNodes.push_back(&arc_n0c_s0w_s1w_ac);
-				sumNodes.push_back(&arc_s0w_s1w_s2w_ac);
-				sumNodes.push_back(&arc_s0c_ac);
-				sumNodes.push_back(&arc_s0c_s0t_ac);
-				sumNodes.push_back(&arc_s1c_ac);
-				sumNodes.push_back(&arc_s1c_s0t_ac);
-				sumNodes.push_back(&arc_s0c_s1c_ac);
-				sumNodes.push_back(&arc_s0c_s1c_s0t_ac);
-				sumNodes.push_back(&arc_s0c_n0c_ac);
-				sumNodes.push_back(&arc_s0c_n0c_s0t_ac);
-				sumNodes.push_back(&arc_s1c_n0c_ac);
-				sumNodes.push_back(&arc_s1c_n0c_s0t_ac);
-				sumNodes.push_back(&arc_n0c_s0c_s1c_ac);
-				sumNodes.push_back(&arc_s0c_s1c_s2c_ac);
+				if (arc_s0w_ac.executed)sumNodes.push_back(&arc_s0w_ac);
+				if (arc_s0t_ac.executed)sumNodes.push_back(&arc_s0t_ac);
+				if (arc_s0w_s0t_ac.executed)sumNodes.push_back(&arc_s0w_s0t_ac);
+				if (arc_s1w_ac.executed)sumNodes.push_back(&arc_s1w_ac);
+				if (arc_s1w_s1t_ac.executed)sumNodes.push_back(&arc_s1w_s1t_ac);
+				if (arc_n0c_ac.executed)sumNodes.push_back(&arc_n0c_ac);
+				if (arc_s0w_s1w_ac.executed)sumNodes.push_back(&arc_s0w_s1w_ac);
+				if (arc_s0w_s1w_s0t_ac.executed)sumNodes.push_back(&arc_s0w_s1w_s0t_ac);
+				if (arc_s0w_n0c_ac.executed)sumNodes.push_back(&arc_s0w_n0c_ac);
+				if (arc_s0w_n0c_s0t_ac.executed)sumNodes.push_back(&arc_s0w_n0c_s0t_ac);
+				if (arc_s1w_n0c_ac.executed)sumNodes.push_back(&arc_s1w_n0c_ac);
+				if (arc_s1w_n0c_s0t_ac.executed)sumNodes.push_back(&arc_s1w_n0c_s0t_ac);
+				if (arc_n0c_s0t_ac.executed)sumNodes.push_back(&arc_n0c_s0t_ac);
+				if (arc_n0c_s0w_s1w_ac.executed)sumNodes.push_back(&arc_n0c_s0w_s1w_ac);
+				if (arc_s0w_s1w_s2w_ac.executed)sumNodes.push_back(&arc_s0w_s1w_s2w_ac);
+				if (arc_s0c_ac.executed)sumNodes.push_back(&arc_s0c_ac);
+				if (arc_s0c_s0t_ac.executed)sumNodes.push_back(&arc_s0c_s0t_ac);
+				if (arc_s1c_ac.executed)sumNodes.push_back(&arc_s1c_ac);
+				if (arc_s1c_s0t_ac.executed)sumNodes.push_back(&arc_s1c_s0t_ac);
+				if (arc_s0c_s1c_ac.executed)sumNodes.push_back(&arc_s0c_s1c_ac);
+				if (arc_s0c_s1c_s0t_ac.executed)sumNodes.push_back(&arc_s0c_s1c_s0t_ac);
+				if (arc_s0c_n0c_ac.executed)sumNodes.push_back(&arc_s0c_n0c_ac);
+				if (arc_s0c_n0c_s0t_ac.executed)sumNodes.push_back(&arc_s0c_n0c_s0t_ac);
+				if (arc_s1c_n0c_ac.executed)sumNodes.push_back(&arc_s1c_n0c_ac);
+				if (arc_s1c_n0c_s0t_ac.executed)sumNodes.push_back(&arc_s1c_n0c_s0t_ac);
+				if (arc_n0c_s0c_s1c_ac.executed)sumNodes.push_back(&arc_n0c_s0c_s1c_ac);
+				if (arc_s0c_s1c_s2c_ac.executed)sumNodes.push_back(&arc_s0c_s1c_s2c_ac);
 
-				if (atomFeat.sid_s0s1arcl == 1)sumNodes.push_back(&arc_s0s1left_s0s1SWL_ac);
-				if (atomFeat.sid_s0s1arcr == 1)sumNodes.push_back(&arc_s0s1right_s0s1SWL_ac);
-				if (atomFeat.sid_s0s1SWD == 1)sumNodes.push_back(&arc_s0s1SWD_s0s1SWL_ac);
+				if (arc_s0s1left_s0s1SWL_ac.executed && atomFeat.sid_s0s1arcl == 1)sumNodes.push_back(&arc_s0s1left_s0s1SWL_ac);
+				if (arc_s0s1right_s0s1SWL_ac.executed && atomFeat.sid_s0s1arcr == 1)sumNodes.push_back(&arc_s0s1right_s0s1SWL_ac);
+				if (arc_s0s1SWD_s0s1SWL_ac.executed && atomFeat.sid_s0s1SWD == 1)sumNodes.push_back(&arc_s0s1SWD_s0s1SWL_ac);
 			}
 
 			if (ac.isSeparate() || ac.isFinish() || ac.isIdle()){
-				sumNodes.push_back(&pos_1W_1WP);
-				sumNodes.push_back(&pos_1W_2WP);
-				sumNodes.push_back(&pos_2Wcn_1W_1WP);
-				sumNodes.push_back(&pos_2Wcn_1W_n0c_1WP);
-				sumNodes.push_back(&pos_1Wcn_1WP);
-				sumNodes.push_back(&pos_1CC_1WP);
-				sumNodes.push_back(&pos_1WP_ac);
-				sumNodes.push_back(&pos_1WL_1WP_ac);
-				sumNodes.push_back(&pos_1WL_1WP_2WP);
-				sumNodes.push_back(&pos_1WL_1WP_2WP_ac);
-				sumNodes.push_back(&pos_1W_ac);
-				sumNodes.push_back(&pos_1WP_2WP_ac);
-				sumNodes.push_back(&pos_1W_n0c_1WP);
-				sumNodes.push_back(&pos_n0c_ac);
-				sumNodes.push_back(&pos_CC0_ac);
-				sumNodes.push_back(&pos_n0c_1WP_ac);
-				sumNodes.push_back(&pos_n0c_1WP_2WP_ac);
-				sumNodes.push_back(&pos_n0c_1WP);
-				sumNodes.push_back(&pos_n0c_1Wcn_1WP_ac);
-				sumNodes.push_back(&pos_1W_2WP_ac);
-				sumNodes.push_back(&pos_2W_1WP_ac);
-				sumNodes.push_back(&sep_1Whc_C0);
-				sumNodes.push_back(&sep_2Whc_1Whc);
-				sumNodes.push_back(&sep_2Wc0_1Whc);
-				sumNodes.push_back(&sep_2Wcn_1Whc);
-				sumNodes.push_back(&sep_2W_1Whc);
-				sumNodes.push_back(&sep_2Whc_1W);
-				sumNodes.push_back(&sep_2Wc_1WL);
-				sumNodes.push_back(&sep_2WL_1Wc);
-				sumNodes.push_back(&sep_2Whc_1Wcn);
-				sumNodes.push_back(&sep_1Whc_1WL);
-				sumNodes.push_back(&pos_1Whc_1WP);
-				sumNodes.push_back(&pos_1Whc_2WP);
-				sumNodes.push_back(&pos_2Wcn_1Whc_1WP);
-				sumNodes.push_back(&pos_2Wcn_1Whc_n0c_1WP);
-				sumNodes.push_back(&pos_1Whc_ac);
-				sumNodes.push_back(&pos_1Whc_n0c_1WP);
-				sumNodes.push_back(&pos_1Whc_2WP_ac);
-				sumNodes.push_back(&pos_2Whc_1WP_ac);
+				if (pos_1W_1WP.executed)sumNodes.push_back(&pos_1W_1WP);
+				if (pos_1W_2WP.executed)sumNodes.push_back(&pos_1W_2WP);
+				if (pos_2Wcn_1W_1WP.executed)sumNodes.push_back(&pos_2Wcn_1W_1WP);
+				if (pos_2Wcn_1W_n0c_1WP.executed)sumNodes.push_back(&pos_2Wcn_1W_n0c_1WP);
+				if (pos_1Wcn_1WP.executed)sumNodes.push_back(&pos_1Wcn_1WP);
+				if (pos_1CC_1WP.executed)sumNodes.push_back(&pos_1CC_1WP);
+				if (pos_1WP_ac.executed)sumNodes.push_back(&pos_1WP_ac);
+				if (pos_1WL_1WP_ac.executed)sumNodes.push_back(&pos_1WL_1WP_ac);
+				if (pos_1WL_1WP_2WP.executed)sumNodes.push_back(&pos_1WL_1WP_2WP);
+				if (pos_1WL_1WP_2WP_ac.executed)sumNodes.push_back(&pos_1WL_1WP_2WP_ac);
+				if (pos_1W_ac.executed)sumNodes.push_back(&pos_1W_ac);
+				if (pos_1WP_2WP_ac.executed)sumNodes.push_back(&pos_1WP_2WP_ac);
+				if (pos_1W_n0c_1WP.executed)sumNodes.push_back(&pos_1W_n0c_1WP);
+				if (pos_n0c_ac.executed)sumNodes.push_back(&pos_n0c_ac);
+				if (pos_CC0_ac.executed)sumNodes.push_back(&pos_CC0_ac);
+				if (pos_n0c_1WP_ac.executed)sumNodes.push_back(&pos_n0c_1WP_ac);
+				if (pos_n0c_1WP_2WP_ac.executed)sumNodes.push_back(&pos_n0c_1WP_2WP_ac);
+				if (pos_n0c_1WP.executed)sumNodes.push_back(&pos_n0c_1WP);
+				if (pos_n0c_1Wcn_1WP_ac.executed)sumNodes.push_back(&pos_n0c_1Wcn_1WP_ac);
+				if (pos_1W_2WP_ac.executed)sumNodes.push_back(&pos_1W_2WP_ac);
+				if (pos_2W_1WP_ac.executed)sumNodes.push_back(&pos_2W_1WP_ac);
+				if (pos_1Whc_1WP.executed)sumNodes.push_back(&pos_1Whc_1WP);
+				if (pos_1Whc_2WP.executed)sumNodes.push_back(&pos_1Whc_2WP);
+				if (pos_2Wcn_1Whc_1WP.executed)sumNodes.push_back(&pos_2Wcn_1Whc_1WP);
+				if (pos_2Wcn_1Whc_n0c_1WP.executed)sumNodes.push_back(&pos_2Wcn_1Whc_n0c_1WP);
+				if (pos_1Whc_ac.executed)sumNodes.push_back(&pos_1Whc_ac);
+				if (pos_1Whc_n0c_1WP.executed)sumNodes.push_back(&pos_1Whc_n0c_1WP);
+				if (pos_1Whc_2WP_ac.executed)sumNodes.push_back(&pos_1Whc_2WP_ac);
+				if (pos_2Whc_1WP_ac.executed)sumNodes.push_back(&pos_2Whc_1WP_ac);
+				if (sep_1Whc_C0.executed)sumNodes.push_back(&sep_1Whc_C0);
+				if (sep_2Whc_1Whc.executed)sumNodes.push_back(&sep_2Whc_1Whc);
+				if (sep_2Wc0_1Whc.executed)sumNodes.push_back(&sep_2Wc0_1Whc);
+				if (sep_2Wcn_1Whc.executed)sumNodes.push_back(&sep_2Wcn_1Whc);
+				if (sep_2W_1Whc.executed)sumNodes.push_back(&sep_2W_1Whc);
+				if (sep_2Whc_1W.executed)sumNodes.push_back(&sep_2Whc_1W);
+				if (sep_2Wc_1WL.executed)sumNodes.push_back(&sep_2Wc_1WL);
+				if (sep_2WL_1Wc.executed)sumNodes.push_back(&sep_2WL_1Wc);
+				if (sep_2Whc_1Wcn.executed)sumNodes.push_back(&sep_2Whc_1Wcn);
+				if (sep_1Whc_1WL.executed)sumNodes.push_back(&sep_1Whc_1WL);
 			}
 
 			if (ac.isAppend()){
-				sumNodes.push_back(&app_1C_C0_1WP);
-				sumNodes.push_back(&app_1Wc0_C0_1WP);
-				sumNodes.push_back(&app_2CT_1CT_CT0_1WP);
+				if (app_1C_C0_1WP.executed)sumNodes.push_back(&app_1C_C0_1WP);
+				if (app_1Wc0_C0_1WP.executed)sumNodes.push_back(&app_1Wc0_C0_1WP);
+				if (app_2CT_1CT_CT0_1WP.executed)sumNodes.push_back(&app_2CT_1CT_CT0_1WP);
 			}
 
 			if (ac.isSeparate() || ac.isFinish() || ac.isIdle()){
-				//if (atomFeat.sid_1WTagD == 1)sumNodes.push_back(&sep_1WTagD_1WP_1WL);
+				//if (sep_1WTagD_1WP_1WL.executed && atomFeat.sid_1WTagD == 1)sumNodes.push_back(&sep_1WTagD_1WP_1WL);
 			}
 			
 			if (prevStateNode != NULL){

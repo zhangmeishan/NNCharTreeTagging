@@ -133,6 +133,9 @@ private:
 			}
 			pBestNode->loss.coeffRef(0) = 1.0 / num;
 
+			pGoldNode->lossed = true;
+			pBestNode->lossed = true;
+
 			return 1.0;
 		}
 
@@ -173,6 +176,7 @@ private:
 				pGoldNode->loss = Mat::Zero(1, 1);
 			}
 			pGoldNode->loss.coeffRef(0) = -1.0 / num;
+			pGoldNode->lossed = true;
 
 			max = pCurNode->val.coeffRef(0);
 			sum = 0.0;
@@ -190,6 +194,7 @@ private:
 					pCurNode->loss = Mat::Zero(1, 1);
 				}
 				pCurNode->loss.coeffRef(0) += scores[idx] / (sum * num);
+				pCurNode->lossed = true;
 			}
 
 			cost += -log(scores[goldIndex] / sum);
