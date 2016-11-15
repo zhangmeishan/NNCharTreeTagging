@@ -149,7 +149,7 @@ struct ActionedNodes {
 	vector<SPAddNode> outputs;
 
 public:
-	inline void initial(ModelParams& params, HyperParams& hyparams){
+	inline void initial(ModelParams& params, HyperParams& hyparams, AlignedMemoryPool* mem){
 		app_1C_C0.setParam(&params.app_1C_C0);
 		app_1Wc0_C0.setParam(&params.app_1Wc0_C0);
 		app_2CT_1CT_CT0.setParam(&params.app_2CT_1CT_CT0);
@@ -254,6 +254,111 @@ public:
 		//sep_1WTagD_1WP_1WL.setParam(&params.sep_1WTagD_1WP_1WL);
 
 		outputs.resize(hyparams.action_num);
+		
+		app_1C_C0.init(1, -1, mem);
+		app_1Wc0_C0.init(1, -1, mem);
+		app_2CT_1CT_CT0.init(1, -1, mem);
+
+		sep_1C_C0.init(1, -1, mem);
+		sep_1Wc0_C0.init(1, -1, mem);
+		sep_2CT_1CT_CT0.init(1, -1, mem);
+		sep_1W.init(1, -1, mem);
+		sep_1WD_1WL.init(1, -1, mem);
+		sep_1WSingle.init(1, -1, mem);
+		sep_1W_C0.init(1, -1, mem);
+		sep_2W_1W.init(1, -1, mem);
+		sep_2Wc0_1W.init(1, -1, mem);
+		sep_2Wcn_1W.init(1, -1, mem);
+		sep_2Wc0_1Wc0.init(1, -1, mem);
+		sep_2Wcn_1Wcn.init(1, -1, mem);
+		sep_2W_1WL.init(1, -1, mem);
+		sep_2WL_1W.init(1, -1, mem);
+		sep_2W_1Wcn.init(1, -1, mem);
+		sep_1Wc0_1WL.init(1, -1, mem);
+		sep_1Wcn_1WL.init(1, -1, mem);
+		for (int idx = 0; idx < max_seg_length; idx++){
+			sep_1Wci_1Wcn_1WP[idx].init(1, -1, mem);
+		}
+
+		arc_s0w_ac.init(hyparams.action_num, -1, mem);
+		arc_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s0w_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s1w_ac.init(hyparams.action_num, -1, mem);
+		arc_s1w_s1t_ac.init(hyparams.action_num, -1, mem);
+		arc_n0c_ac.init(hyparams.action_num, -1, mem);
+		arc_s0w_s1w_ac.init(hyparams.action_num, -1, mem);
+		arc_s0w_s1w_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s0w_n0c_ac.init(hyparams.action_num, -1, mem);
+		arc_s0w_n0c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s1w_n0c_ac.init(hyparams.action_num, -1, mem);
+		arc_s1w_n0c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_n0c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_n0c_s0w_s1w_ac.init(hyparams.action_num, -1, mem);
+		arc_s0w_s1w_s2w_ac.init(hyparams.action_num, -1, mem);
+		arc_s0c_ac.init(hyparams.action_num, -1, mem);
+		arc_s0c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s1c_ac.init(hyparams.action_num, -1, mem);
+		arc_s1c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s0c_s1c_ac.init(hyparams.action_num, -1, mem);
+		arc_s0c_s1c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s0c_n0c_ac.init(hyparams.action_num, -1, mem);
+		arc_s0c_n0c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_s1c_n0c_ac.init(hyparams.action_num, -1, mem);
+		arc_s1c_n0c_s0t_ac.init(hyparams.action_num, -1, mem);
+		arc_n0c_s0c_s1c_ac.init(hyparams.action_num, -1, mem);
+		arc_s0c_s1c_s2c_ac.init(hyparams.action_num, -1, mem);
+		pos_1W_1WP.init(1, -1, mem);
+		pos_1W_2WP.init(1, -1, mem);
+		pos_2Wcn_1W_1WP.init(1, -1, mem);
+		pos_2Wcn_1W_n0c_1WP.init(1, -1, mem);
+		pos_1Wcn_1WP.init(1, -1, mem);
+		pos_1CC_1WP.init(1, -1, mem);
+		pos_1WP_ac.init(hyparams.action_num, -1, mem);
+		pos_1WL_1WP_ac.init(hyparams.action_num, -1, mem);
+		pos_1WL_1WP_2WP.init(1, -1, mem);
+		pos_1WL_1WP_2WP_ac.init(hyparams.action_num, -1, mem);
+		pos_1W_ac.init(hyparams.action_num, -1, mem);
+		pos_1WP_2WP_ac.init(hyparams.action_num, -1, mem);
+		pos_1W_n0c_1WP.init(1, -1, mem);
+		pos_n0c_ac.init(hyparams.action_num, -1, mem);
+		pos_CC0_ac.init(hyparams.action_num, -1, mem);
+		pos_n0c_1WP_ac.init(hyparams.action_num, -1, mem);
+		pos_n0c_1WP_2WP_ac.init(hyparams.action_num, -1, mem);
+		pos_n0c_1WP.init(1, -1, mem);
+		pos_n0c_1Wcn_1WP_ac.init(hyparams.action_num, -1, mem);
+		pos_1W_2WP_ac.init(hyparams.action_num, -1, mem);
+		pos_2W_1WP_ac.init(hyparams.action_num, -1, mem);
+		app_1C_C0_1WP.init(1, -1, mem);
+		app_1Wc0_C0_1WP.init(1, -1, mem);
+		app_2CT_1CT_CT0_1WP.init(1, -1, mem);
+		sep_1Whc_C0.init(1, -1, mem);
+		sep_2Whc_1Whc.init(1, -1, mem);
+		sep_2Wc0_1Whc.init(1, -1, mem);
+		sep_2Wcn_1Whc.init(1, -1, mem);
+		sep_2W_1Whc.init(1, -1, mem);
+		sep_2Whc_1W.init(1, -1, mem);
+		sep_2Wc_1WL.init(1, -1, mem);
+		sep_2WL_1Wc.init(1, -1, mem);
+		sep_2Whc_1Wcn.init(1, -1, mem);
+		sep_1Whc_1WL.init(1, -1, mem);
+		pos_1Whc_1WP.init(1, -1, mem);
+		pos_1Whc_2WP.init(1, -1, mem);
+		pos_2Wcn_1Whc_1WP.init(1, -1, mem);
+		pos_2Wcn_1Whc_n0c_1WP.init(1, -1, mem);
+		pos_1Whc_ac.init(hyparams.action_num, -1, mem);
+		pos_1Whc_n0c_1WP.init(1, -1, mem);
+		pos_1Whc_2WP_ac.init(hyparams.action_num, -1, mem);
+		pos_2Whc_1WP_ac.init(hyparams.action_num, -1, mem);
+
+		arc_s0s1left_s0s1SWL_ac.init(hyparams.action_num, -1, mem);
+		arc_s0s1right_s0s1SWL_ac.init(hyparams.action_num, -1, mem);
+		arc_s0s1SWD_s0s1SWL_ac.init(hyparams.action_num, -1, mem);
+
+		//sep_1WTagD_1WP_1WL.init(1, -1, mem);	
+		
+		for (int idx = 0; idx < hyparams.action_num; idx++) {
+			outputs[idx].init(1, -1, mem);
+		}				
 	}
 
 

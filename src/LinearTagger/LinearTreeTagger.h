@@ -21,7 +21,7 @@ using namespace std;
 
 class TreeTagger {
 public:
-	TreeTagger();
+	TreeTagger(size_t memsize);
 	virtual ~TreeTagger();
 
 public:

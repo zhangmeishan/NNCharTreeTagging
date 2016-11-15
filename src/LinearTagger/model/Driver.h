@@ -21,7 +21,7 @@ using namespace std;
 //re-implementation of Yue and Clark ACL (2007)
 class Driver {
 public:
-  Driver() {
+  Driver(size_t memsize) : aligned_mem(memsize){
 	  _pcg = NULL;
   }
 
@@ -40,6 +40,8 @@ public:
 	CheckGrad _checkgrad;
 	ModelUpdate _ada;  // model update
 
+	AlignedMemoryPool aligned_mem;
+
 public:
 
 	inline void initial() {
@@ -54,7 +56,8 @@ public:
 		_hyperparams.print();
 
 		_pcg = new ComputionGraph();
-		_pcg->initial(_modelparams, _hyperparams);
+		_pcg->initial(_modelparams, _hyperparams, &aligned_mem);
+		std::cout << "allocated memory: " << aligned_mem.capacity << ", total required memory: " << aligned_mem.required << ", perc = " << aligned_mem.capacity*1.0 / aligned_mem.required << std::endl;
 
 		setUpdateParameters(_hyperparams.nnRegular, _hyperparams.adaAlpha, _hyperparams.adaEps);
 	}
@@ -114,7 +117,7 @@ private:
 		int offset = _pcg->outputs[step - 1].size();
 		for (int idx = 0; idx < offset; idx++){
 			pCurNode = _pcg->outputs[step - 1][idx].in;
-			if (pBestNode == NULL || pCurNode->val.coeffRef(0) > pBestNode->val.coeffRef(0)){
+			if (pBestNode == NULL || pCurNode->val[0] > pBestNode->val[0]){
 				pBestNode = pCurNode;
 			}
 			if (_pcg->outputs[step - 1][idx].bGold){
@@ -123,15 +126,9 @@ private:
 		}
 
 		if (pGoldNode != pBestNode){
-			if (pGoldNode->loss.size() == 0){
-				pGoldNode->loss = Mat::Zero(1, 1);
-			}
-			pGoldNode->loss.coeffRef(0) = -1.0 / num;
+			pGoldNode->loss[0] = -1.0 / num;
 
-			if (pBestNode->loss.size() == 0){
-				pBestNode->loss = Mat::Zero(1, 1);
-			}
-			pBestNode->loss.coeffRef(0) = 1.0 / num;
+			pBestNode->loss[0] = 1.0 / num;
 
 			pGoldNode->lossed = true;
 			pBestNode->lossed = true;
@@ -160,7 +157,7 @@ private:
 			pBestNode = pGoldNode = NULL;
 			for (int idx = 0; idx < curcount; idx++){
 				pCurNode = _pcg->outputs[step][idx].in;
-				if (pBestNode == NULL || pCurNode->val.coeffRef(0) > pBestNode->val.coeffRef(0)){
+				if (pBestNode == NULL || pCurNode->val[0] > pBestNode->val[0]){
 					pBestNode = pCurNode;
 				}
 				if (_pcg->outputs[step][idx].bGold){
@@ -172,28 +169,21 @@ private:
 			if (goldIndex == -1){
 				std::cout << "impossible" << std::endl;
 			}
-			if (pGoldNode->loss.size() == 0){
-				pGoldNode->loss = Mat::Zero(1, 1);
-			}
-			pGoldNode->loss.coeffRef(0) = -1.0 / num;
+			pGoldNode->loss[0] = -1.0 / num;
 			pGoldNode->lossed = true;
 
-			max = pCurNode->val.coeffRef(0);
+			max = pCurNode->val[0];
 			sum = 0.0;
 			scores.resize(curcount);
 			for (int idx = 0; idx < curcount; idx++){
 				pCurNode = _pcg->outputs[step][idx].in;
-				scores[idx] = exp(pCurNode->val.coeffRef(0) - max);
+				scores[idx] = exp(pCurNode->val[0] - max);
 				sum += scores[idx];
 			}
 
 			for (int idx = 0; idx < curcount; idx++){
 				pCurNode = _pcg->outputs[step][idx].in;
-
-				if (pCurNode->loss.size() == 0){
-					pCurNode->loss = Mat::Zero(1, 1);
-				}
-				pCurNode->loss.coeffRef(0) += scores[idx] / (sum * num);
+				pCurNode->loss[0] += scores[idx] / (sum * num);
 				pCurNode->lossed = true;
 			}
 
